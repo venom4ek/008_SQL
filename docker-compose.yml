@@ -10,7 +10,7 @@ services:
       - MYSQL_USER=app
       - MYSQL_PASSWORD=pass
     volumes:
-      - /SQL/resources:/docker-entrypoint-initdb.d
+      - ./resources:/docker-entrypoint-initdb.d
 
   adminer:
     image: adminer
