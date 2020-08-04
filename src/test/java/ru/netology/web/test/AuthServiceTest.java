@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AuthServiceTest {
 
-    @AfterAll
-    public static void cleanTable() throws SQLException {
-        DataHelper.cleanAllTable();
-    }
+//    @AfterAll
+//    public static void cleanTable() throws SQLException {
+//        DataHelper.cleanAllTable();
+//    }
 
     @Test
-    void shouldDashboardPage() throws SQLException {
+    void shouldDashboardPage() {
         val authPage = new AuthPage();
         val authInfo = DataHelper.getAuthInfo();
         val verificationPage = authPage.validLogin(authInfo);
@@ -51,7 +51,7 @@ public class AuthServiceTest {
         val authPage = new AuthPage();
         val authInfo = DataHelper.getLoginWithBadPassword();
         authPage.moreInvalidPassword(authInfo);
-        assertEquals("Превышено колиество попыток входа! Попробуйте позже!", authPage.getErrorBlocked().getText());
+        assertEquals("Превышено количество попыток входа! Попробуйте позже!", authPage.getErrorBlocked().getText());
     }
 
     @Test

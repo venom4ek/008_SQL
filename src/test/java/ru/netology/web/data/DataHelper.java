@@ -8,6 +8,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DataHelper {
+    private String url = "jdbc:mysql://192.168.99.100:3306/app";
+    private String user = "app";
+    private String password = "pass";
+
+
     private DataHelper() {
     }
 
@@ -24,7 +29,7 @@ public class DataHelper {
                 val connect = DriverManager.getConnection(
                         "jdbc:mysql://192.168.99.100:3306/app", "app", "pass"
                 )
-                ) {
+        ) {
             run.update(connect, foreignCheckOff);
             run.update(connect, auth_codes);
             run.update(connect, card_transactions);
@@ -50,20 +55,21 @@ public class DataHelper {
     }
 
     public static AuthInfo getWrongAuthInfo() {
-        return new AuthInfo("wrongUser","invalidPass");
+        return new AuthInfo("wrongUser", "invalidPass");
     }
 
     @Value
 
     public static class VerificationCode {
         private String code;
+
     }
 
-    public static String getUserId() throws SQLException {
+    public String getUserId() {
         val getUserId = "SELECT id FROM users WHERE login = 'vasya';";
         try (
-                val connect = DriverManager.getConnection(
-                        "jdbc:mysql://192.168.99.100:3306/app", "app", "pass"
+                val connect = DriverManager.getConnection( url, user, password
+//                        "jdbc:mysql://192.168.99.100:3306/app", "app", "pass"
                 );
                 val createStmt = connect.createStatement();
         ) {
@@ -73,16 +79,18 @@ public class DataHelper {
                     return userId;
                 }
             }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);  // maybe create a new exception type?
         }
         return null;
     }
 
-    public static String getVerificationCode() throws SQLException{
+    public String getVerificationCode() {
         val requestCode = "SELECT code FROM auth_codes WHERE user_id = ? ORDER BY created DESC LIMIT 1;";
 
         try (
-                val connect = DriverManager.getConnection(
-                        "jdbc:mysql://192.168.99.100:3306/app", "app", "pass"
+                val connect = DriverManager.getConnection(url, user, password
+//                        "jdbc:mysql://192.168.99.100:3306/app", "app", "pass"
                 );
                 val prepareStmt = connect.prepareStatement(requestCode);
         ) {
@@ -93,11 +101,13 @@ public class DataHelper {
                     return code;
                 }
             }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);  // maybe create a new exception type?
         }
         return null;
     }
 
-    public static String setStatusUserVasya() throws SQLException{
+    public static String setStatusUserVasya() {
         val requestCode = "UPDATE users SET status = 'disable' WHERE login = 'vasya';";
 
         try (
@@ -107,6 +117,8 @@ public class DataHelper {
                 val createStmt = connect.createStatement();
         ) {
             createStmt.executeQuery(requestCode);
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);  // maybe create a new exception type?
         }
         return null;
     }
