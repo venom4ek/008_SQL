@@ -13,18 +13,20 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AuthServiceTest {
+    DataHelper dataHelper = new DataHelper();
 
-//    @AfterAll
-//    public static void cleanTable() throws SQLException {
-//        DataHelper.cleanAllTable();
-//    }
+    @AfterAll
+    public static void cleanTable() throws SQLException {
+        DataHelper dataHelper = new DataHelper();
+        dataHelper.cleanAllTable();
+    }
 
     @Test
     void shouldDashboardPage() {
         val authPage = new AuthPage();
-        val authInfo = DataHelper.getAuthInfo();
+        val authInfo = dataHelper.getAuthInfo();
         val verificationPage = authPage.validLogin(authInfo);
-        val codeVerify = DataHelper.getVerificationCode();
+        val codeVerify = dataHelper.getVerificationCode();
         verificationPage.validVerify(codeVerify);
         val dashboardPage = new DashboardPage();
         dashboardPage.isDashboardPage();
@@ -33,23 +35,23 @@ public class AuthServiceTest {
     @Test
     void shouldErrorWithInvalidLogin() {
         val authPage = new AuthPage();
-        val authInfo = DataHelper.getWrongAuthInfo();
+        val authInfo = dataHelper.getWrongAuthInfo();
         authPage.invalidLogin(authInfo);
     }
 
     @Test
     void shouldErrorWithInvalidCode() {
         val authPage = new AuthPage();
-        val authInfo = DataHelper.getAuthInfo();
+        val authInfo = dataHelper.getAuthInfo();
         val verificationCode = authPage.validLogin(authInfo);
-        val codeVerify = DataHelper.getInvalidVerificationCode();
+        val codeVerify = dataHelper.getInvalidVerificationCode();
         verificationCode.invalidVerify(codeVerify);
     }
 
     @Test
     void shouldBlockedWithMoreInvalidPassword() {
         val authPage = new AuthPage();
-        val authInfo = DataHelper.getLoginWithBadPassword();
+        val authInfo = dataHelper.getLoginWithBadPassword();
         authPage.moreInvalidPassword(authInfo);
         assertEquals("Превышено количество попыток входа! Попробуйте позже!", authPage.getErrorBlocked().getText());
     }
@@ -57,18 +59,18 @@ public class AuthServiceTest {
     @Test
     void shouldBlockedWithMoreErrorCode() {
         val authPage = new AuthPage();
-        val authInfo = DataHelper.getAuthInfo();
+        val authInfo = dataHelper.getAuthInfo();
         val verificationCode = authPage.validLogin(authInfo);
-        val codeVerify = DataHelper.getInvalidVerificationCode();
+        val codeVerify = dataHelper.getInvalidVerificationCode();
         verificationCode.moreInvalidVerify(codeVerify);
         assertEquals("Ошибка! Превышено количество попыток ввода кода!", authPage.getErrorBlocked().getText());
     }
 
     @Test
     void shouldErrorWithBlockedAccount() throws SQLException {
-        DataHelper.setStatusUserVasya();
+        dataHelper.setStatusUserVasya();
         val authPage = new AuthPage();
-        val authInfo = DataHelper.getAuthInfo();
+        val authInfo = dataHelper.getAuthInfo();
         authPage.validLoginWithBlockedStatus(authInfo);
         assertEquals("Ваш аккаунт заблокирован!", authPage.getErrorBlocked().getText());
     }
@@ -80,27 +82,27 @@ public class AuthServiceTest {
         @Test
         void shouldMoreLoginPage () throws SQLException {
             val authPage = new AuthPage();
-            val authInfo = DataHelper.getAuthInfo();
+            val authInfo = dataHelper.getAuthInfo();
             val verificationPage = authPage.validLogin(authInfo);
-            val codeVerify = DataHelper.getVerificationCode();
+            val codeVerify = dataHelper.getVerificationCode();
             verificationPage.validVerify(codeVerify);
 
             val authPage1 = new AuthPage();
-            val authInfo1 = DataHelper.getAuthInfo();
+            val authInfo1 = dataHelper.getAuthInfo();
             val verificationPage1 = authPage1.validLogin(authInfo1);
-            val codeVerify1 = DataHelper.getVerificationCode();
+            val codeVerify1 = dataHelper.getVerificationCode();
             verificationPage1.validVerify(codeVerify1);
 
             val authPage2 = new AuthPage();
-            val authInfo2 = DataHelper.getAuthInfo();
+            val authInfo2 = dataHelper.getAuthInfo();
             val verificationPage2 = authPage2.validLogin(authInfo2);
-            val codeVerify2 = DataHelper.getVerificationCode();
+            val codeVerify2 = dataHelper.getVerificationCode();
             verificationPage2.validVerify(codeVerify2);
 
             val authPage3 = new AuthPage();
-            val authInfo3 = DataHelper.getAuthInfo();
+            val authInfo3 = dataHelper.getAuthInfo();
             val verificationPage3 = authPage3.validLogin(authInfo3);
-            val codeVerify3 = DataHelper.getVerificationCode();
+            val codeVerify3 = dataHelper.getVerificationCode();
             verificationPage3.validVerify(codeVerify3);
 
             val dashboardPage = new DashboardPage();

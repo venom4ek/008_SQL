@@ -13,10 +13,7 @@ public class DataHelper {
     private String password = "pass";
 
 
-    private DataHelper() {
-    }
-
-    public static void cleanAllTable() throws SQLException {
+    public void cleanAllTable() throws SQLException {
         val foreignCheckOff = "SET FOREIGN_KEY_CHECKS=0;";
         val foreignCheckOn = "SET FOREIGN_KEY_CHECKS=1;";
         val run = new QueryRunner();
@@ -40,27 +37,27 @@ public class DataHelper {
     }
 
     @Value
-    public static class AuthInfo {
+    public class AuthInfo {
 
         private String login;
         private String password;
     }
 
-    public static AuthInfo getAuthInfo() {
+    public AuthInfo getAuthInfo() {
         return new AuthInfo("vasya", "qwerty123");
     }
 
-    public static AuthInfo getLoginWithBadPassword() {
+    public AuthInfo getLoginWithBadPassword() {
         return new AuthInfo("vasya", "qwerty999");
     }
 
-    public static AuthInfo getWrongAuthInfo() {
+    public AuthInfo getWrongAuthInfo() {
         return new AuthInfo("wrongUser", "invalidPass");
     }
 
     @Value
 
-    public static class VerificationCode {
+    public class VerificationCode {
         private String code;
 
     }
@@ -107,7 +104,7 @@ public class DataHelper {
         return null;
     }
 
-    public static String setStatusUserVasya() {
+    public String setStatusUserVasya() {
         val requestCode = "UPDATE users SET status = 'disable' WHERE login = 'vasya';";
 
         try (
@@ -123,7 +120,7 @@ public class DataHelper {
         return null;
     }
 
-    public static String getInvalidVerificationCode() {
+    public String getInvalidVerificationCode() {
         return "159632";
     }
 
