@@ -23,9 +23,8 @@ public class DataHelper {
         val users = "truncate table users;";
 
         try (
-                val connect = DriverManager.getConnection(
-                        "jdbc:mysql://192.168.99.100:3306/app", "app", "pass"
-                )
+                val connect = DriverManager.getConnection(url, user, password
+                );
         ) {
             run.update(connect, foreignCheckOff);
             run.update(connect, auth_codes);
@@ -33,6 +32,8 @@ public class DataHelper {
             run.update(connect, cards);
             run.update(connect, users);
             run.update(connect, foreignCheckOn);
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);  // maybe create a new exception type?
         }
     }
 
@@ -65,8 +66,7 @@ public class DataHelper {
     public String getUserId() {
         val getUserId = "SELECT id FROM users WHERE login = 'vasya';";
         try (
-                val connect = DriverManager.getConnection( url, user, password
-//                        "jdbc:mysql://192.168.99.100:3306/app", "app", "pass"
+                val connect = DriverManager.getConnection(url, user, password
                 );
                 val createStmt = connect.createStatement();
         ) {
@@ -87,7 +87,6 @@ public class DataHelper {
 
         try (
                 val connect = DriverManager.getConnection(url, user, password
-//                        "jdbc:mysql://192.168.99.100:3306/app", "app", "pass"
                 );
                 val prepareStmt = connect.prepareStatement(requestCode);
         ) {
@@ -108,8 +107,7 @@ public class DataHelper {
         val requestCode = "UPDATE users SET status = 'disable' WHERE login = 'vasya';";
 
         try (
-                val connect = DriverManager.getConnection(
-                        "jdbc:mysql://192.168.99.100:3306/app", "app", "pass"
+                val connect = DriverManager.getConnection(url, user, password
                 );
                 val createStmt = connect.createStatement();
         ) {
